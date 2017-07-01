@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graph</title>
+</head>
+<header>
+    F(x) = <input type="text" id="textBox" title="">
+    <button id="drawButton">Draw</button>
+    <button id="clearButton">Clear</button>
+</header>
+<body>
+<canvas id="canvas" width="1000" height="900"></canvas>
+<script type='text/javascript' src='Graph.js'></script>
+</body>
+</html>
+
+<script>
+    document.getElementById("drawButton").addEventListener('click', draw);
+    document.getElementById("clearButton").addEventListener('click', clear);
+
+    var a_canvas = document.getElementById("canvas");
+    var context = a_canvas.getContext("2d");
+    clear();
+
+    function draw() {
+        let equation = document.getElementById('textBox').value;
+        document.getElementById('textBox').value = '';
+        let points = [];
+        for (let x = -10; x <= 10; x+=0.01) {
+            let y = calculateY(equation, x) * -1;
+            points.push({x: x, y: y});
+        }
+        for (let i = 0; i < points.length - 1; i++) {
+            let curPoint = points[i];
+            let nextPoint = points[i + 1];
+
+            context.moveTo((curPoint.x * 30) + 500, (curPoint.y * 30) + 400);
+            context.lineTo((nextPoint.x * 30) + 500, (nextPoint.y * 30) + 400);
+        }
+        context.stroke();
+    }
+
+    function clear() {
+        context.beginPath();
+        context.clearRect(0, 0, a_canvas.width, a_canvas.height);
+        context.fillStyle = "black";
+        context.moveTo(500, 100);
+        context.lineTo(500, 700);
+        context.moveTo(200, 400);
+        context.lineTo(800, 400);
+
+        for (let i = 0; i <= 20; i++) {
+            context.moveTo(200 + (i * 30), 390);
+            context.lineTo(200 + (i * 30), 410);
+        }
+        for (let i = 0; i <= 20; i++) {
+            context.moveTo(510, 100 + (i * 30));
+            context.lineTo(490, 100 + (i * 30));
+        }
+
+        context.stroke();
+    }
+
+    function calculateY(equation, x) {
+        return eval(equation);
+    }
+</script>
